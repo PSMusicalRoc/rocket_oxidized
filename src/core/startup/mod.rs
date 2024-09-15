@@ -3,7 +3,7 @@ mod logging;
 use logging::initialize_logger;
 use log::info;
 
-use crate::core::error::{RocketError, RocketErrorTypes};
+use crate::core::error::RocketError;
 /// Initializes the Rocket Engine:
 /// - Starts the logger
 /// 
@@ -16,17 +16,10 @@ use crate::core::error::{RocketError, RocketErrorTypes};
 pub fn initialize_rocket() -> RocketError {
 
     // intitialize logging
-    let log_status = initialize_logger();
-    match log_status.error_code {
-        RocketErrorTypes::RocketNoError => {}
-        _ => { return log_status; }
-    }
+    initialize_logger();
 
-    info!("Welcome to Rocket!");
+    info!("Welcome to Rocket {}!", crate::core::ROCKET_VERSION);
     
     // Initialization was successful, return no error
-    RocketError {
-        error_code: RocketErrorTypes::RocketNoError,
-        error_message: format!("No Error")
-    }
+    RocketError::no_error()
 }

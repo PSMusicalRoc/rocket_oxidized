@@ -3,7 +3,7 @@ use std::fmt::Display;
 #[derive(Debug, PartialEq, Eq)]
 pub enum RocketErrorTypes {
     RocketNoError = 0,
-    RocketFailedToInitLogger
+    RocketBackendError
 }
 
 impl Display for RocketErrorTypes {
@@ -16,6 +16,16 @@ impl Display for RocketErrorTypes {
 pub struct RocketError {
     pub error_message: String,
     pub error_code: RocketErrorTypes
+}
+
+impl RocketError {
+
+    pub fn no_error() -> RocketError {
+        RocketError {
+            error_code: RocketErrorTypes::RocketNoError,
+            error_message: format!("No Error")
+        }
+    }
 }
 
 impl Display for RocketError {

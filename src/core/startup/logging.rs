@@ -5,7 +5,49 @@ use crate::core::error::{RocketError, RocketErrorTypes};
 
 /// Initializes the logger with colored stdout
 /// and filenames/linenumbers.
+#[cfg(not(debug_assertions))]
 pub fn initialize_logger() -> RocketError {
+
+    env_logger::builder()
+        .filter_level(log::LevelFilter::Info)
+        .format(|buf, record| {
+            
+            let fmt_str = format!("[{}]: {}",
+                record.level(),
+                record.args());
+
+            writeln!(buf, "{}",
+                match record.level() {
+                    log::Level::Trace => {
+                        fmt_str.white()
+                    },
+                    log::Level::Debug => {
+                        fmt_str.cyan()
+                    }
+                    log::Level::Info => {
+                        fmt_str.green()
+                    },
+                    log::Level::Warn => {
+                        fmt_str.yellow()
+                    },
+                    log::Level::Error => {
+                        fmt_str.red()
+                    }
+                }
+            )
+        })
+        .init();
+
+    RocketError {
+        error_code: RocketErrorTypes::RocketNoError,
+        error_message: format!("No Error")
+    }
+}
+
+#[cfg(debug_assertions)]
+pub fn initialize_logger() -> RocketError {
+    use log::trace;
+
 
     env_logger::builder()
         .filter_level(log::LevelFilter::Trace)
@@ -38,6 +80,8 @@ pub fn initialize_logger() -> RocketError {
             )
         })
         .init();
+
+    trace!("Created logger!");
 
     RocketError {
         error_code: RocketErrorTypes::RocketNoError,

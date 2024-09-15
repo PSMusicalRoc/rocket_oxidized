@@ -6,9 +6,7 @@ fn main() {
     
     let rocket_startup = initialize_rocket();
     match rocket_startup.error_code {
-        RocketErrorTypes::RocketNoError => {
-            println!("Started successfully!");
-        },
+        RocketErrorTypes::RocketNoError => {},
         _ => {
             println!("Rocket failed to start");
             println!("{}", rocket_startup);
