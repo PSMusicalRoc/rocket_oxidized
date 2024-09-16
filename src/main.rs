@@ -3,9 +3,10 @@ pub mod core;
 use log::{error, info};
 use core::error::RocketErrorTypes;
 use core::RocketApplicationBuilder;
+use std::process::exit;
 
 fn mainloop(deltatime: f32) {
-    info!("Frame: {} seconds", deltatime);
+    println!("Deltatime: {}", deltatime);
 }
 
 fn main() {
@@ -19,9 +20,11 @@ fn main() {
     match status.error_code {
         RocketErrorTypes::RocketNoError => {
             info!("Completed execution successfully!");
+            exit(0);
         },
         _ => {
             error!("{}", status);
+            exit(1);
         }
     }
 

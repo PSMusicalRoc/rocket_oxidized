@@ -1,5 +1,7 @@
+mod eventsystem;
 mod logging;
 
+use eventsystem::initialize_event_system;
 use logging::initialize_logger;
 use log::info;
 
@@ -24,6 +26,12 @@ pub fn initialize_rocket() -> RocketError {
 
     info!("Welcome to Rocket {}!", crate::core::ROCKET_VERSION);
     
+    let eventsystem_setup = initialize_event_system();
+    match eventsystem_setup.error_code {
+        RocketErrorTypes::RocketNoError => {},
+        _ => { return eventsystem_setup; }
+    }
+
     // Initialization was successful, return no error
     RocketError::no_error()
 }

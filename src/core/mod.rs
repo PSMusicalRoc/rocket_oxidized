@@ -1,6 +1,7 @@
 use std::time::{Duration, Instant};
 
 use error::{RocketError, RocketErrorTypes};
+use events::{types::quitevent::RocketQuitEventStruct, EVENT_SYSTEM};
 use startup::initialize_rocket;
 
 pub mod backends;
@@ -72,7 +73,12 @@ impl RocketApplication {
             (self.mainloop)(deltatime.as_secs_f32());
             match overall_program_runtime.checked_sub(deltatime) {
                 Some(remaining) => { overall_program_runtime = remaining; },
-                None => { break 'update; }
+                None => {
+                    let evsys = EVENT_SYSTEM.write().unwrap();
+                    let mut quit_event: RocketQuitEventStruct = RocketQuitEventStruct::new();
+                    evsys.handle_event(&mut quit_event);
+                    break 'update;
+                }
             }
         }
         RocketError::no_error()
