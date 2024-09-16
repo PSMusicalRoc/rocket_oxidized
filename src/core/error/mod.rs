@@ -3,6 +3,7 @@ use std::fmt::Display;
 #[derive(Debug, PartialEq, Eq)]
 pub enum RocketErrorTypes {
     RocketNoError = 0,
+    RocketInitLoggerError,
     RocketBackendError
 }
 
