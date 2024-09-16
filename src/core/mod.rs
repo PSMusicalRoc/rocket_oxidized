@@ -1,9 +1,10 @@
 use std::time::{Duration, Instant};
 
+use app::{appstate::AppState, APPLICATION_STATE};
 use error::{RocketError, RocketErrorTypes};
-use events::{types::quitevent::RocketQuitEventStruct, EVENT_SYSTEM};
 use startup::initialize_rocket;
 
+pub mod app;
 pub mod error;
 pub mod events;
 pub mod startup;
@@ -60,25 +61,21 @@ impl RocketApplication {
             _ => { return rocket_startup; }
         }
 
-        let mut overall_program_runtime: Duration = Duration::new(10, 0);
         let mut time_point: Instant = Instant::now();
 
         'update: loop {
+            let readlock = APPLICATION_STATE.read().unwrap();
+            if !readlock.is_app_still_running() {
+                break 'update;
+            }
+            drop(readlock);
+            
             let tmp_time_point = Instant::now();
             let deltatime: Duration = time_point.elapsed();
             time_point = tmp_time_point;
 
             // @todo maybe return an error?
             (self.mainloop)(deltatime.as_secs_f32());
-            match overall_program_runtime.checked_sub(deltatime) {
-                Some(remaining) => { overall_program_runtime = remaining; },
-                None => {
-                    let evsys = EVENT_SYSTEM.write().unwrap();
-                    let mut quit_event: RocketQuitEventStruct = RocketQuitEventStruct::new();
-                    evsys.handle_event(&mut quit_event);
-                    break 'update;
-                }
-            }
         }
         RocketError::no_error()
     }

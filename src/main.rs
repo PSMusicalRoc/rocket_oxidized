@@ -2,11 +2,27 @@ pub mod core;
 
 use log::{error, info};
 use core::error::RocketErrorTypes;
+use core::events::types::quitevent::RocketQuitEventStruct;
+use core::events::EVENT_SYSTEM;
 use core::RocketApplicationBuilder;
+use std::io::BufRead;
 use std::process::exit;
 
-fn mainloop(deltatime: f32) {
-    println!("Deltatime: {}", deltatime);
+fn mainloop(_deltatime: f32) {
+    let mut stdin = std::io::stdin().lock();
+    let mut s: String = String::new();
+    match stdin.read_line(&mut s) {
+        Ok(_) => {
+            if s.contains("quit") {
+                let evsys = EVENT_SYSTEM.write().unwrap();
+                let mut quitevent = RocketQuitEventStruct::new();
+                evsys.handle_event(&mut quitevent);
+            }
+        },
+        Err(e) => {
+            println!("{}", e);
+        }
+    }
 }
 
 fn main() {
