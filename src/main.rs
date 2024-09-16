@@ -4,8 +4,8 @@ use log::{error, info};
 use core::error::RocketErrorTypes;
 use core::RocketApplicationBuilder;
 
-fn mainloop(test: f32) {
-    info!("I wanna die {}", test);
+fn mainloop(deltatime: f32) {
+    info!("Frame: {} seconds", deltatime);
 }
 
 fn main() {

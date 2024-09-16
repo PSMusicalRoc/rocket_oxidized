@@ -1,8 +1,11 @@
+use std::time::{Duration, Instant};
+
 use error::{RocketError, RocketErrorTypes};
 use startup::initialize_rocket;
 
 pub mod backends;
 pub mod error;
+pub mod events;
 pub mod startup;
 
 pub const ROCKET_VERSION: &str = "v0.0.0 dev";
@@ -57,9 +60,20 @@ impl RocketApplication {
             _ => { return rocket_startup; }
         }
 
-        loop {
-            (self.mainloop)(1.0);
-            break;
+        let mut overall_program_runtime: Duration = Duration::new(10, 0);
+        let mut time_point: Instant = Instant::now();
+
+        'update: loop {
+            let tmp_time_point = Instant::now();
+            let deltatime: Duration = time_point.elapsed();
+            time_point = tmp_time_point;
+
+            // @todo maybe return an error?
+            (self.mainloop)(deltatime.as_secs_f32());
+            match overall_program_runtime.checked_sub(deltatime) {
+                Some(remaining) => { overall_program_runtime = remaining; },
+                None => { break 'update; }
+            }
         }
         RocketError::no_error()
     }
