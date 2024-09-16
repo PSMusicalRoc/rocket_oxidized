@@ -4,7 +4,6 @@ use error::{RocketError, RocketErrorTypes};
 use events::{types::quitevent::RocketQuitEventStruct, EVENT_SYSTEM};
 use startup::initialize_rocket;
 
-pub mod backends;
 pub mod error;
 pub mod events;
 pub mod startup;
