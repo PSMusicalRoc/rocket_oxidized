@@ -4,7 +4,8 @@ use std::fmt::Display;
 pub enum RocketErrorTypes {
     RocketNoError = 0,
     RocketInitLoggerError,
-    RocketBackendError
+    RocketBackendError,
+    RocketFailedToAcquireLockError
 }
 
 impl Display for RocketErrorTypes {

@@ -3,7 +3,7 @@ pub mod core;
 use log::{error, info};
 use core::error::RocketErrorTypes;
 use core::events::types::quitevent::RocketQuitEventStruct;
-use core::events::EVENT_SYSTEM;
+use core::events::*;
 use core::RocketApplicationBuilder;
 use std::io::BufRead;
 use std::process::exit;
@@ -14,9 +14,8 @@ fn mainloop(_deltatime: f32) {
     match stdin.read_line(&mut s) {
         Ok(_) => {
             if s.contains("quit") {
-                let evsys = EVENT_SYSTEM.write().unwrap();
                 let mut quitevent = RocketQuitEventStruct::new();
-                evsys.handle_event(&mut quitevent);
+                send_event(&mut quitevent);
             }
         },
         Err(e) => {
