@@ -1,8 +1,11 @@
-pub trait AppState {
+use lazy_static::lazy_static;
+use std::sync::RwLock;
 
-    fn is_app_still_running(&self) -> bool;
-    fn quit_application(&mut self);
-}
+// pub trait AppState {
+
+//     fn is_app_still_running(&self) -> bool;
+//     fn quit_application(&mut self);
+// }
 
 trait RocketResettable {
 
@@ -11,7 +14,7 @@ trait RocketResettable {
 
 pub struct AppStateContainer {
 
-    is_running: bool
+    pub is_running: bool
 }
 
 impl AppStateContainer {
@@ -29,16 +32,23 @@ impl RocketResettable for AppStateContainer {
 }
 
 
-impl AppState for AppStateContainer {
+// impl AppState for AppStateContainer {
 
-    fn is_app_still_running(&self) -> bool {
-        self.is_running
-    }
+//     fn is_app_still_running(&self) -> bool {
+//         self.is_running
+//     }
 
-    fn quit_application(&mut self) {
-        self.is_running = false;
-    }
-}
+//     fn quit_application(&mut self) {
+//         self.is_running = false;
+//     }
+// }
 
 unsafe impl Send for AppStateContainer {}
 unsafe impl Sync for AppStateContainer {}
+
+
+lazy_static!{
+
+    pub static ref APPLICATION_STATE: RwLock<AppStateContainer> = RwLock::new(AppStateContainer::new());
+
+}

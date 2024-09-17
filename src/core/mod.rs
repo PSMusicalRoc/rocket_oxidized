@@ -1,6 +1,6 @@
 use std::time::{Duration, Instant};
 
-use app::{appstate::AppState, APPLICATION_STATE};
+use app::QueryApplication;
 use error::{RocketError, RocketErrorTypes};
 use startup::initialize_rocket;
 
@@ -64,11 +64,9 @@ impl RocketApplication {
         let mut time_point: Instant = Instant::now();
 
         'update: loop {
-            let readlock = APPLICATION_STATE.read().unwrap();
-            if !readlock.is_app_still_running() {
+            if !QueryApplication::is_app_still_running() {
                 break 'update;
             }
-            drop(readlock);
             
             let tmp_time_point = Instant::now();
             let deltatime: Duration = time_point.elapsed();
