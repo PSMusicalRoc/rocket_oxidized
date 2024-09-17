@@ -34,6 +34,8 @@ pub const ROCKET_VERSION: &str = concat!(env!("CARGO_PKG_VERSION"), env!("ROCKET
 
 /// The function signature for the "update"
 /// function passed into [RocketApplicationBuilder].
+/// 
+/// @todo: Change signature to return an error value
 pub type RocketMainloopType = fn(f32);
 
 /// Builder for a [RocketApplication]
@@ -129,6 +131,16 @@ pub struct RocketApplication {
 
 impl RocketApplication {
 
+    /// Starts the created application. The actual
+    /// functionality is based on the loops provided
+    /// to the Builder.
+    /// 
+    /// # Returns
+    /// This method returns a [RocketError] struct. If
+    /// there was any kind of error, the error code will
+    /// be anything other than `RocketNoError` and the
+    /// message will have a description of what went wrong.
+    /// Otherwise, the error code will be `RocketNoError`.
     pub fn run_application(&mut self) -> RocketError {
 
         let rocket_startup = initialize_rocket();
