@@ -22,6 +22,7 @@ use std::time::{Duration, Instant};
 use app::QueryApplication;
 use error::{RocketError, RocketErrorTypes};
 use startup::initialize_rocket;
+use const_format::concatcp;
 
 pub mod app;
 pub mod error;
@@ -30,7 +31,7 @@ pub mod startup;
 
 /// The current version of the Rocket Engine! Used
 /// primarily for initialization.
-pub const ROCKET_VERSION: &str = "v0.0.0 dev";
+pub const ROCKET_VERSION: &str = concat!(env!("CARGO_PKG_VERSION"), env!("ROCKET_VERSION_SUFFIX"));
 
 /// The function signature for the "update"
 /// function passed into [RocketApplicationBuilder].
