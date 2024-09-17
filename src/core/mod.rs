@@ -22,7 +22,6 @@ use std::time::{Duration, Instant};
 use app::QueryApplication;
 use error::{RocketError, RocketErrorTypes};
 use startup::initialize_rocket;
-use const_format::concatcp;
 
 pub mod app;
 pub mod error;
@@ -37,6 +36,8 @@ pub const ROCKET_VERSION: &str = concat!(env!("CARGO_PKG_VERSION"), env!("ROCKET
 /// function passed into [RocketApplicationBuilder].
 pub type RocketMainloopType = fn(f32);
 
+/// Builder for a [RocketApplication]
+/// 
 /// This struct dictates the creation of a [RocketApplication].
 /// It serves to allow the user to customize most everything
 /// about the application, including its name, loop functions,
@@ -113,6 +114,13 @@ impl RocketApplicationBuilder {
     }
 }
 
+/// A runnable application
+///
+/// The actual application object returned by the
+/// [RocketApplicationBuilder::build()] method. This
+/// struct allows the user to run their custom-built
+/// program through the [RocketApplication::run_application()]
+/// method.
 #[allow(dead_code)]
 pub struct RocketApplication {
     application_name: String,
