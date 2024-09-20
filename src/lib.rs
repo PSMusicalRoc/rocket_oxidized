@@ -8,6 +8,6 @@
 //! project for more than just one thing!) and
 //! ease of use.
 
-#![warn(missing_docs)]
+#![deny(missing_docs)]
 
 pub mod core;
