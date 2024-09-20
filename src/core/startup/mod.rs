@@ -1,3 +1,11 @@
+//! # Startup functions
+//! 
+//! This module contains an `initialize_rocket()` function
+//! that will ensure that all Rocket components are up
+//! and running before continuing. This calls functions in
+//! the submodules that relate to the event system, logging,
+//! etc.
+
 mod eventsystem;
 mod logging;
 
