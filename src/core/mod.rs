@@ -26,7 +26,9 @@ use startup::initialize_rocket;
 pub mod app;
 pub mod error;
 pub mod events;
-pub mod startup;
+
+
+mod startup;
 
 /// The current version of the Rocket Engine! Used
 /// primarily for initialization.
